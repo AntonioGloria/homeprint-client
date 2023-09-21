@@ -4,22 +4,28 @@ import { useState } from 'react'
 const PrintJobForm = () => {
   const serverURL = import.meta.env.VITE_API
 
-  //const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState(null)
+  const [message, setMessage] = useState(null)
   const [file, setFile] = useState(null)
   const [pages, setPages] = useState('1')
   const [copies, setCopies] = useState(1)
   const [scale, setScale] = useState('fit')
   const [monochrome, setMonochrome] = useState(true)
-  const [message, setMessage] = useState(null)
 
   const handleAddFile = async (e) => {
     try {
-      const formData = new FormData();
-      formData.append("file", e.target.files[0]);
+      const addedFile = e.target.files[0]
+
+      // create file preview
+      let reader = new FileReader()
+      reader.readAsDataURL(addedFile)
+      reader.onloadend = (e) => setPreview(e.target.result)
+
+      // upload file to server for printing
+      const formData = new FormData()
+      formData.append("file", addedFile)
       const upload = await axios.post(`${serverURL}/upload`, formData)
-      //const prev = await axios.get(`${serverURL}/preview/${upload.data.path}`)
       setFile(upload.data);
-      //setPreview(prev.data)
     }
 
     catch (error) {
@@ -49,13 +55,13 @@ const PrintJobForm = () => {
         </label>
       </div>
 
-      {/* {file &&
       <div className='form-section'>
-        <object data={`${preview}`} type="application/pdf">
-          <p>Unable to display PDF file.</p>
+        <object data={preview} type="application/pdf" width={"500vw"} height={"500vh"}>
+          <div className='file-preview'>
+            <h3>Upload a file to preview.</h3>
+          </div>
         </object>
       </div>
-      } */}
 
       <div className='form-section'>
         <label htmlFor='pages'>Page(s) to Print: </label>

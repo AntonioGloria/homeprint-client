@@ -33,9 +33,14 @@ form {
     text-align: center;
 }
 
-/* input[type=file] {
-    display: none;
-} */
+.file-preview {
+    width: 25vw;
+    height: 50vh;
+    border: 2px aquamarine dashed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 input[type=text], input[type=number], select, option {
     background-color: inherit;
