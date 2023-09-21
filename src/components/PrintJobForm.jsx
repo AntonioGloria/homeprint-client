@@ -7,7 +7,7 @@ const PrintJobForm = () => {
   const [preview, setPreview] = useState(null)
   const [message, setMessage] = useState(null)
   const [file, setFile] = useState(null)
-  const [pages, setPages] = useState('1')
+  const [pages, setPages] = useState('All')
   const [copies, setCopies] = useState(1)
   const [scale, setScale] = useState('fit')
   const [monochrome, setMonochrome] = useState(true)
@@ -29,7 +29,7 @@ const PrintJobForm = () => {
     }
 
     catch (error) {
-      console.log(error)
+      setMessage(error)
     }
   }
 
@@ -41,73 +41,73 @@ const PrintJobForm = () => {
       setMessage(response.data);
     }
     catch (error) {
-      console.log(error);
+      setMessage(error)
     }
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Print A PDF File</h2>
-      <div className='form-section'>
-        <label htmlFor='print-file' className='file-upload' onChange={(e) => handleAddFile(e)}>
-          Choose File to Print
-          <input id='print-file' type='file' hidden/>
+      <div className='form-main'>
+        <label htmlFor='print-file' className='form-section' onChange={(e) => handleAddFile(e)}>
+          <object data={preview} className='pdf-viewer' type='application/pdf'>
+            <div className='file-preview'>
+              <h2>Click here to add a file to print</h2>
+            </div>
+          </object>
+          <input id='print-file' type='file' accept='application/pdf' hidden/>
         </label>
-      </div>
 
-      <div className='form-section'>
-        <object data={preview} type="application/pdf" width={"500vw"} height={"500vh"}>
-          <div className='file-preview'>
-            <h3>Upload a file to preview.</h3>
+        <div className='form-section'>
+          <div className='input-set'>
+            <label htmlFor='pages'><strong>Page(s) to Print: </strong></label>
+            <input name='pages' type='text' value={pages} onChange={(e) => setPages(e.target.value)}/>
           </div>
-        </object>
-      </div>
 
-      <div className='form-section'>
-        <label htmlFor='pages'>Page(s) to Print: </label>
-        <input name='pages' type='text' value={pages} onChange={(e) => setPages(e.target.value)}/>
-      </div>
+          <div className='input-set'>
+            <label htmlFor='copies'><strong>Copies: </strong></label>
+            <input name='copies' type='number' min={1} value={copies} onChange={(e) => setCopies(e.target.value)}/>
+          </div>
 
-      <div className='form-section'>
-        <label htmlFor='copies'>Copies: </label>
-        <input name='copies' type='number' min={1} value={copies} onChange={(e) => setCopies(e.target.value)}/>
-      </div>
+          <div className='input-set'>
+          <label htmlFor='monochrome'><strong>Color Options</strong></label>
+            <div className='radio-grp'>
+              <label>
+                Black and White
+                <input type='radio' name='monochrome' checked={ monochrome } onChange={() => setMonochrome(true)}/>
+              </label>
+              <label>
+                Color
+                <input type='radio' name='monochrome' onChange={() => setMonochrome(false)}/>
+              </label>
+            </div>
+          </div>
 
-      <div className='form-section'>
-      <label htmlFor='monochrome'>Color Options:</label>
-        <div className='radio-grp'>
-          <label>
-            Black and White
-            <input type='radio' name='monochrome' checked={ monochrome } onChange={() => setMonochrome(true)}/>
-          </label>
-          <label>
-            Color
-            <input type='radio' name='monochrome' onChange={() => setMonochrome(false)}/>
-          </label>
+          <div className='input-set'>
+            <label htmlFor='scale'><strong>Document Scale</strong></label>
+            <div className='radio-grp'>
+              <label>
+                Fit
+                <input type='radio' name='scale' value={'fit'} checked={scale==='fit'} onChange={(e) => setScale(e.target.value)}/>
+              </label>
+              <label>
+                Shrink
+                <input type='radio' name='scale' value={'shrink'} onChange={(e) => setScale(e.target.value)}/>
+              </label>
+              <label>
+                No-Scale
+                <input type='radio' name='scale' value={'noscale'} onChange={(e) => setScale(e.target.value)}/>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className='form-section'>
-        <label htmlFor='scale'>Document Scale:</label>
-        <div className='radio-grp'>
-          <label>
-            Fit
-            <input type='radio' name='scale' value={'fit'} checked={scale==='fit'} onChange={(e) => setScale(e.target.value)}/>
-          </label>
-          <label>
-            Shrink
-            <input type='radio' name='scale' value={'shrink'} onChange={(e) => setScale(e.target.value)}/>
-          </label>
-          <label>
-            No-Scale
-            <input type='radio' name='scale' value={'noscale'} onChange={(e) => setScale(e.target.value)}/>
-          </label>
-        </div>
-      </div>
       <div className='form-end'>
-        <button type='submit'>Print</button>
+        <button type='submit'>Print File</button>
         {message && <p>{message}</p>}
       </div>
+
     </form>
   )
 }

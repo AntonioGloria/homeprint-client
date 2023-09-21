@@ -27,6 +27,12 @@ form {
     border-radius: 1em;
     padding: 2em;
     margin: 2em auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-main {
+    display: flex;
 }
 
 .form-end {
@@ -36,10 +42,16 @@ form {
 .file-preview {
     width: 25vw;
     height: 50vh;
-    border: 2px aquamarine dashed;
+    border: 2px dashed var(--color-mid);
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+}
+
+.pdf-viewer {
+    width: 25vw;
+    height: 50vh;
 }
 
 input[type=text], input[type=number], select, option {
@@ -71,7 +83,7 @@ input[type=radio]:checked {
     background-color: var(--color-light);
 }
 
-button, .file-upload {
+button {
     font-weight: bold;
     border-radius: 0.5em;
     padding: 0.5em;
@@ -80,18 +92,23 @@ button, .file-upload {
     color: var(--color-light);
 }
 
-button:hover, .file-upload:hover {
+button:hover {
     color: var(--color-dark);
     background-color: var(--color-light);
 }
 
 .form-section {
-    margin: 2vh 0;
+    margin: 2em;
+}
+
+.input-set {
+    margin: 2em 0;
 }
 
 .radio-grp {
     display: flex;
     justify-content: space-around;
+    margin-top: 0.5em;
 }
 
 .radio-grp label {
