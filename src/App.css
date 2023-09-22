@@ -33,13 +33,14 @@ form {
 
 .form-main {
     display: flex;
+    margin: 2em 0;
 }
 
 .form-end {
     text-align: center;
 }
 
-.file-preview {
+.file-placeholder {
     width: 25vw;
     height: 50vh;
     border: 2px dashed var(--color-mid);
@@ -49,9 +50,16 @@ form {
     cursor: pointer;
 }
 
-.pdf-viewer {
+iframe {
     width: 25vw;
     height: 50vh;
+    border: 1px solid var(--color-mid);
+}
+
+.file-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 input[type=text], input[type=number], select, option {
@@ -83,18 +91,20 @@ input[type=radio]:checked {
     background-color: var(--color-light);
 }
 
-button {
+button, .file-preview label {
     font-weight: bold;
     border-radius: 0.5em;
     padding: 0.5em;
+    margin: 1em;
     background-color: var(--color-dark);
     border: 1px solid var(--color-light);
     color: var(--color-light);
 }
 
-button:hover {
+button:hover, .file-preview label:hover {
     color: var(--color-dark);
     background-color: var(--color-light);
+    cursor: pointer;
 }
 
 .form-section {
@@ -111,6 +121,11 @@ button:hover {
     margin-top: 0.5em;
 }
 
-.radio-grp label {
+.radio-grp label, .file-preview label {
     display: block;
+    width: fit-content;
+}
+
+.errorMsg {
+    color: tomato;
 }
