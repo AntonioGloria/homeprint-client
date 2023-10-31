@@ -8,6 +8,7 @@ const PrintJobForm = () => {
   const [message, setMessage] = useState(null)
   const [msgClass, setMsgClass] = useState('')
   const [file, setFile] = useState(null)
+  const [filePages, setFilePages] = useState(0)
   const [pages, setPages] = useState('All')
   const [copies, setCopies] = useState(1)
   const [scale, setScale] = useState('fit')
@@ -20,7 +21,14 @@ const PrintJobForm = () => {
       // create file preview
       let reader = new FileReader()
       reader.readAsDataURL(addedFile)
-      reader.onloadend = (e) => setPreview(e.target.result)
+
+      reader.onloadend = (e) => {
+        const loadFile = e.target.result
+        const fileBin = atob(loadFile.split(',')[1])
+
+        setPreview(loadFile)
+        setFilePages(fileBin.match(/\/Type[\s]*\/Page[^s]/g).length)
+      }
 
       // upload file to server for printing
       const formData = new FormData()
@@ -53,6 +61,14 @@ const PrintJobForm = () => {
 
       setMsgClass('')
       setMessage(response.data)
+
+      // Reset form defaults for next print job
+      setFile(null)
+      setFilePages(0)
+      setPages('All')
+      setCopies(1)
+      setScale('fit')
+      setMonochrome(true)
     }
 
     catch (error) {
@@ -75,6 +91,7 @@ const PrintJobForm = () => {
 
         {(preview && file) &&
           <div className='file-preview'>
+            <h3>{file.originalname} - {filePages} Pages</h3>
             <iframe src={preview}/>
             <label htmlFor='print-file' onChange={(e) => handleAddFile(e)}>
               Choose a different file
