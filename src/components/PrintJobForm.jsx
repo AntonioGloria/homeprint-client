@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { useState } from 'react'
+import ConfirmModal from './ConfirmModal'
 
 const PrintJobForm = () => {
   const serverURL = import.meta.env.VITE_API
 
+  const [showModal, setShowModal] = useState(false)
   const [preview, setPreview] = useState(null)
   const [message, setMessage] = useState(null)
   const [msgClass, setMsgClass] = useState('')
@@ -45,10 +47,9 @@ const PrintJobForm = () => {
     }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleConfirm = () => {
     try {
-      if(!file) {
+      if (!file) {
         throw new Error("You must add a file!")
       }
 
@@ -56,11 +57,26 @@ const PrintJobForm = () => {
         throw new Error(`You must fill in the Pages field!`)
       }
 
+      setShowModal(true)
+      setMsgClass('')
+      setMessage('')
+    }
+
+    catch (error) {
+      setMsgClass('errorMsg')
+      setMessage(`ERROR: ${error.message}`)
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
       const options = { pages, copies, monochrome, scale }
       const response = await axios.post(`${serverURL}/print`, { file, options })
 
       setMsgClass('')
       setMessage(response.data)
+      setShowModal(false);
 
       // Reset form defaults for next print job
       setFile(null)
@@ -112,10 +128,10 @@ const PrintJobForm = () => {
           </div>
 
           <div className='input-set'>
-          <strong>Color Options</strong>
+          <strong>Color Mode</strong>
             <div className='radio-grp'>
               <label>
-                Black and White
+                Black & White
                 <input type='radio' name='monochrome' checked={ monochrome } onChange={() => setMonochrome(true)}/>
               </label>
               <label>
@@ -146,7 +162,7 @@ const PrintJobForm = () => {
       </div>
 
       <div className='form-end'>
-        <button type='submit'>Print File</button>
+        <button type='button' onClick={handleConfirm}>Print File</button>
         {message &&
           <p className={msgClass}>
             <strong>{`[${message}]`}</strong>
@@ -154,6 +170,9 @@ const PrintJobForm = () => {
         }
       </div>
 
+      {showModal &&
+        <ConfirmModal setShowModal={setShowModal} summary={{file, pages, copies, filePages, scale, monochrome}}/>
+      }
     </form>
   )
 }

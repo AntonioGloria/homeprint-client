@@ -2,6 +2,7 @@
     --color-light: aquamarine;
     --color-mid: cadetblue;
     --color-dark: #333;
+    --color-error: tomato;
 }
 
 * {
@@ -20,15 +21,38 @@ h1, h2 {
     text-align: center;
 }
 
+.overlay {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+form, .modal {
+    border: var(--color-light) 2px solid;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal {
+    background-color: var(--color-dark);
+    text-align: center;
+    width: 18vw;
+    padding: 1em;
+    border-radius: 0.75em;
+}
+
 form {
     width: max-content;
     height: max-content;
-    border: var(--color-light) 2px solid;
-    border-radius: 1em;
-    padding: 2em;
     margin: 2em auto;
-    display: flex;
-    flex-direction: column;
+    padding: 2em;
+    border-radius: 1em;
 }
 
 .form-main {
@@ -107,6 +131,15 @@ button:hover, .file-preview label:hover {
     cursor: pointer;
 }
 
+.cancel {
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+}
+
+.cancel:hover {
+    background-color: var(--color-error);
+}
+
 .form-section {
     margin: 2em;
 }
@@ -127,5 +160,16 @@ button:hover, .file-preview label:hover {
 }
 
 .errorMsg {
-    color: tomato;
+    color: var(--color-error);
+}
+
+.print-summary {
+    margin: 1.5em;
+    list-style: none;
+    line-height: 1.5em;
+}
+
+.print-summary li {
+    display: flex;
+    justify-content: space-between;
 }
