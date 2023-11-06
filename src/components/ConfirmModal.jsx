@@ -18,8 +18,9 @@ const ConfirmModal = (props) => {
         }
         else {
           const start = Number(subRange[0])
-          const end = Number(subRange[1]) + 1
-          totalPages+= end-start
+          const end = Number(subRange[1])
+
+          totalPages = end > start ? end - start + 1 : start - end + 1
         }
       })
 

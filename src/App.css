@@ -42,7 +42,7 @@ form, .modal {
 .modal {
     background-color: var(--color-dark);
     text-align: center;
-    width: 18vw;
+    width: 40vw;
     padding: 1em;
     border-radius: 0.75em;
 }

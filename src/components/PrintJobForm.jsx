@@ -136,7 +136,7 @@ const PrintJobForm = () => {
               </label>
               <label>
                 Color
-                <input type='radio' name='monochrome' onChange={() => setMonochrome(false)}/>
+                <input type='radio' name='monochrome' checked={ !monochrome } onChange={() => setMonochrome(false)}/>
               </label>
             </div>
           </div>
