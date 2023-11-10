@@ -2,6 +2,7 @@
     --color-light: aquamarine;
     --color-mid: cadetblue;
     --color-dark: #333;
+    --color-neutral: #aaa;
     --color-error: tomato;
 }
 
@@ -42,9 +43,31 @@ form, .modal {
 .modal {
     background-color: var(--color-dark);
     text-align: center;
-    width: 40vw;
-    padding: 1em;
     border-radius: 0.75em;
+    overflow: hidden;
+}
+
+.modal.error-msg {
+    border: var(--color-error) 2px solid;
+}
+
+.header {
+    text-align: left;
+    color: var(--color-dark);
+    background-color: var(--color-light);
+    padding: 0.5em;
+}
+
+.error-msg .header {
+    background-color: var(--color-error);
+}
+
+.content {
+    margin: 1em;
+}
+
+.content p {
+    margin-bottom: 1em;
 }
 
 form {
@@ -60,8 +83,8 @@ form {
     margin: 2em 0;
 }
 
-.form-end {
-    text-align: center;
+.confirm-btns {
+    margin-top: 1em;
 }
 
 .file-placeholder {
@@ -78,12 +101,14 @@ iframe {
     width: 25vw;
     height: 50vh;
     border: 1px solid var(--color-mid);
+    margin: 1em 0;
 }
 
 .file-preview {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 1em;
 }
 
 input[type=text], input[type=number], select, option {
@@ -119,7 +144,7 @@ button, .file-preview label {
     font-weight: bold;
     border-radius: 0.5em;
     padding: 0.5em;
-    margin: 1em;
+    margin: 0 1em;
     background-color: var(--color-dark);
     border: 1px solid var(--color-light);
     color: var(--color-light);
@@ -138,6 +163,15 @@ button:hover, .file-preview label:hover {
 
 .cancel:hover {
     background-color: var(--color-error);
+}
+
+.neutral {
+    border: 1px solid var(--color-neutral);
+    color: var(--color-neutral);
+}
+
+.neutral:hover {
+    background-color: var(--color-neutral);
 }
 
 .form-section {
@@ -159,7 +193,7 @@ button:hover, .file-preview label:hover {
     width: fit-content;
 }
 
-.errorMsg {
+.error-msg {
     color: var(--color-error);
 }
 

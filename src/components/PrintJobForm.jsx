@@ -1,14 +1,17 @@
 import axios from 'axios'
 import { useState } from 'react'
 import ConfirmModal from './ConfirmModal'
+import MessageModal from './MessageModal'
 
 const PrintJobForm = () => {
   const serverURL = import.meta.env.VITE_API
 
-  const [showModal, setShowModal] = useState(false)
-  const [preview, setPreview] = useState(null)
+  const [showMsgModal, setShowMsgModal] = useState(false)
   const [message, setMessage] = useState(null)
   const [msgClass, setMsgClass] = useState('')
+  const [showConfirmModal, setConfirmShowModal] = useState(false)
+
+  const [preview, setPreview] = useState(null)
   const [file, setFile] = useState(null)
   const [filePages, setFilePages] = useState(0)
   const [pages, setPages] = useState('All')
@@ -42,8 +45,8 @@ const PrintJobForm = () => {
     }
 
     catch (error) {
-      setMsgClass('errorMsg')
-      setMessage(`ERROR: ${error.message}`)
+      setMsgClass('error-msg')
+      setMessage(error.message)
     }
   }
 
@@ -57,14 +60,15 @@ const PrintJobForm = () => {
         throw new Error(`You must fill in the Pages field!`)
       }
 
-      setShowModal(true)
+      setConfirmShowModal(true)
       setMsgClass('')
       setMessage('')
     }
 
     catch (error) {
-      setMsgClass('errorMsg')
-      setMessage(`ERROR: ${error.message}`)
+      setMsgClass('error-msg')
+      setMessage(error.message)
+      setShowMsgModal(true)
     }
   }
 
@@ -76,7 +80,8 @@ const PrintJobForm = () => {
 
       setMsgClass('')
       setMessage(response.data)
-      setShowModal(false);
+      setConfirmShowModal(false);
+      setShowMsgModal(true)
 
       // Reset form defaults for next print job
       setFile(null)
@@ -88,8 +93,9 @@ const PrintJobForm = () => {
     }
 
     catch (error) {
-      setMsgClass('errorMsg')
-      setMessage(`ERROR: ${error.message}`)
+      setMsgClass('error-msg')
+      setMessage(error.message)
+      setShowMsgModal(true)
     }
   }
 
@@ -161,17 +167,13 @@ const PrintJobForm = () => {
         </div>
       </div>
 
-      <div className='form-end'>
-        <button type='button' onClick={handleConfirm}>Print File</button>
-        {message &&
-          <p className={msgClass}>
-            <strong>{`[${message}]`}</strong>
-          </p>
-        }
-      </div>
+      <button style={{alignSelf: 'center'}} type='button' onClick={handleConfirm}>Print File</button>
 
-      {showModal &&
-        <ConfirmModal setShowModal={setShowModal} summary={{file, pages, copies, filePages, scale, monochrome}}/>
+      {showConfirmModal &&
+        <ConfirmModal setShowModal={setConfirmShowModal} summary={{file, pages, copies, filePages, scale, monochrome}}/>
+      }
+      {showMsgModal &&
+        <MessageModal setShowModal={setShowMsgModal} message={message} msgClass={msgClass}/>
       }
     </form>
   )
