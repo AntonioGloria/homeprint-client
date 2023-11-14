@@ -66,7 +66,7 @@ form, .modal {
     margin: 1em;
 }
 
-.content p {
+.msg {
     margin-bottom: 1em;
 }
 
@@ -200,10 +200,17 @@ button:hover, .file-preview label:hover {
 .print-summary {
     margin: 1.5em;
     list-style: none;
-    line-height: 1.5em;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-column-gap: 1em;
+    grid-row-gap: 0.25em;
 }
 
-.print-summary li {
-    display: flex;
-    justify-content: space-between;
+.print-summary p:nth-child(odd) {
+    text-align: right;
+    font-weight: bold;
+}
+
+.print-summary p:nth-child(even) {
+    text-align: left;
 }

@@ -1,6 +1,6 @@
 const ConfirmModal = (props) => {
   const { setShowModal, summary } = props
-  const { file, filePages, pages, copies, scale, monochrome } = summary
+  const { file, pages, copies, scale, monochrome } = summary
 
   const calculateTotalPages = (selection, copies, filePages) => {
     if (selection ===  "All") {
@@ -36,26 +36,25 @@ const ConfirmModal = (props) => {
         </div>
         <div className="content">
           <h2>Print Job Details</h2>
-          <ul className="print-summary">
-            <li>
-              File Name:<strong>{file?.originalname}</strong>
-            </li>
-            <li>
-              Selected Pages:<strong>{pages}</strong>
-            </li>
-            <li>
-              Copies:<strong>{copies}</strong>
-            </li>
-            <li>
-              Total Pages:<strong>{calculateTotalPages(pages, copies, filePages)}</strong>
-            </li>
-            <li>
-              Color Mode:<strong>{monochrome ? "Black & White" : "Color"}</strong>
-            </li>
-            <li>
-              Scale:<strong>{scale}</strong>
-            </li>
-          </ul>
+          <div className="print-summary">
+            <p>File Name:</p>
+            <p>{file?.originalname}</p>
+
+            <p>Selected Pages:</p>
+            <p>{pages}</p>
+
+            <p>Copies:</p>
+            <p>{copies}</p>
+
+            <p>Total Pages:</p>
+            <p>{calculateTotalPages(pages, copies, file.filePages)}</p>
+
+            <p>Color Mode:</p>
+            <p>{monochrome ? "Black & White" : "Color"}</p>
+
+            <p>Scale:</p>
+            <p>{scale}</p>
+          </div>
 
           <h4>Continue with printing?</h4>
 

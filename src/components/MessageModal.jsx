@@ -10,7 +10,7 @@ const MessageModal = (props) => {
         </div>
 
         <div className="content">
-          <p className={msgClass}>
+          <p className={`msg ${msgClass}`}>
             {message}
           </p>
           <button type="button" className="neutral" onClick={() => setShowModal(false)}>Close</button>

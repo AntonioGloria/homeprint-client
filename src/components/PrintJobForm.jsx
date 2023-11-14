@@ -13,7 +13,6 @@ const PrintJobForm = () => {
 
   const [preview, setPreview] = useState(null)
   const [file, setFile] = useState(null)
-  const [filePages, setFilePages] = useState(0)
   const [pages, setPages] = useState('All')
   const [copies, setCopies] = useState(1)
   const [scale, setScale] = useState('fit')
@@ -29,10 +28,7 @@ const PrintJobForm = () => {
 
       reader.onloadend = (e) => {
         const loadFile = e.target.result
-        const fileBin = atob(loadFile.split(',')[1])
-
         setPreview(loadFile)
-        setFilePages(fileBin.match(/\/Type[\s]*\/Page[^s]/g).length)
       }
 
       // upload file to server for printing
@@ -85,7 +81,6 @@ const PrintJobForm = () => {
 
       // Reset form defaults for next print job
       setFile(null)
-      setFilePages(0)
       setPages('All')
       setCopies(1)
       setScale('fit')
@@ -113,7 +108,7 @@ const PrintJobForm = () => {
 
         {(preview && file) &&
           <div className='file-preview'>
-            <h3>{file.originalname} - {filePages} Pages</h3>
+            <h3>{file.originalname} - {file.filePages} Pages</h3>
             <iframe src={preview}/>
             <label htmlFor='print-file' onChange={(e) => handleAddFile(e)}>
               Choose a different file
@@ -170,7 +165,7 @@ const PrintJobForm = () => {
       <button style={{alignSelf: 'center'}} type='button' onClick={handleConfirm}>Print File</button>
 
       {showConfirmModal &&
-        <ConfirmModal setShowModal={setConfirmShowModal} summary={{file, pages, copies, filePages, scale, monochrome}}/>
+        <ConfirmModal setShowModal={setConfirmShowModal} summary={{file, pages, copies, scale, monochrome}}/>
       }
       {showMsgModal &&
         <MessageModal setShowModal={setShowMsgModal} message={message} msgClass={msgClass}/>
