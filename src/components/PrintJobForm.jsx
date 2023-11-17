@@ -17,6 +17,13 @@ const PrintJobForm = () => {
   const [copies, setCopies] = useState(1)
   const [scale, setScale] = useState('fit')
   const [monochrome, setMonochrome] = useState(true)
+  const [totalPages, setTotalPages] = useState(0)
+
+  const handleError = (error) => {
+    setMsgClass('error-msg')
+    setMessage(error.message)
+    setShowMsgModal(true)
+  }
 
   const handleAddFile = async (e) => {
     try {
@@ -36,13 +43,60 @@ const PrintJobForm = () => {
       formData.append("file", addedFile)
       const upload = await axios.post(`${serverURL}/upload`, formData)
       setFile(upload.data)
+      setTotalPages(upload.data.filePages)
       setMsgClass('')
       setMessage(null)
     }
 
     catch (error) {
-      setMsgClass('error-msg')
-      setMessage(error.message)
+      handleError(error)
+    }
+  }
+
+  const calculateTotalPages = (target) => {
+    const { id, value } = target
+    let calcPages
+    let calcCopies
+
+    if (id === 'pages') {
+      calcPages = value
+      calcCopies = copies
+      setPages(calcPages)
+    }
+
+    if (id === 'copies') {
+      calcCopies = value
+      calcPages = pages
+      setCopies(calcCopies)
+    }
+
+    if (!file) {
+      setTotalPages(0)
+      return
+    }
+
+    if (calcPages ===  "All") {
+      setTotalPages(file.filePages * calcCopies)
+    }
+
+    else {
+      let selectedPages = 0
+      let ranges = calcPages.split(',')
+
+      ranges.forEach(range => {
+        let subRange = range.split('-')
+        if (subRange.length === 1) {
+          selectedPages++
+        }
+        else {
+          const start = Number(subRange[0])
+          const end = Number(subRange[1])
+
+          selectedPages = end > start ? end - start + 1 : start - end + 1
+        }
+      })
+
+      setTotalPages(selectedPages * calcCopies)
     }
   }
 
@@ -62,9 +116,7 @@ const PrintJobForm = () => {
     }
 
     catch (error) {
-      setMsgClass('error-msg')
-      setMessage(error.message)
-      setShowMsgModal(true)
+      handleError(error)
     }
   }
 
@@ -72,7 +124,7 @@ const PrintJobForm = () => {
     e.preventDefault()
     try {
       const options = { pages, copies, monochrome, scale }
-      const response = await axios.post(`${serverURL}/print`, { file, options })
+      const response = await axios.post(`${serverURL}/print`, { file, options, totalPages })
 
       setMsgClass('')
       setMessage(response.data)
@@ -84,13 +136,12 @@ const PrintJobForm = () => {
       setPages('All')
       setCopies(1)
       setScale('fit')
+      setTotalPages(0)
       setMonochrome(true)
     }
 
     catch (error) {
-      setMsgClass('error-msg')
-      setMessage(error.message)
-      setShowMsgModal(true)
+      handleError(error)
     }
   }
 
@@ -120,12 +171,19 @@ const PrintJobForm = () => {
         <div className='form-section'>
           <div className='input-set'>
             <label htmlFor='pages'><strong>Page(s) to Print: </strong></label>
-            <input id='pages' name='pages' type='text' value={pages} onChange={(e) => setPages(e.target.value)}/>
+            <input id='pages' name='pages' type='text' value={pages} onChange={(e) => calculateTotalPages(e.target)}/>
           </div>
 
-          <div className='input-set'>
-            <label htmlFor='copies'><strong>Copies: </strong></label>
-            <input id='copies' name='copies' type='number' min={1} value={copies} onChange={(e) => setCopies(e.target.value)}/>
+          <div className='input-set multi'>
+            <div>
+              <label htmlFor='copies'><strong>Copies: </strong></label>
+              <input id='copies' name='copies' type='number' min={1} size={6} value={copies} onChange={(e) => calculateTotalPages(e.target)}/>
+            </div>
+
+            <div>
+              <label className='page-count'><strong>Total Pages: </strong></label>
+              <input type='text' size={6} disabled readOnly value={totalPages}/>
+            </div>
           </div>
 
           <div className='input-set'>
@@ -165,7 +223,7 @@ const PrintJobForm = () => {
       <button style={{alignSelf: 'center'}} type='button' onClick={handleConfirm}>Print File</button>
 
       {showConfirmModal &&
-        <ConfirmModal setShowModal={setConfirmShowModal} summary={{file, pages, copies, scale, monochrome}}/>
+        <ConfirmModal setShowModal={setConfirmShowModal} summary={{file, pages, copies, scale, monochrome, totalPages}}/>
       }
       {showMsgModal &&
         <MessageModal setShowModal={setShowMsgModal} message={message} msgClass={msgClass}/>

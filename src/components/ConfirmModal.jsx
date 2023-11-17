@@ -1,32 +1,6 @@
 const ConfirmModal = (props) => {
   const { setShowModal, summary } = props
-  const { file, pages, copies, scale, monochrome } = summary
-
-  const calculateTotalPages = (selection, copies, filePages) => {
-    if (selection ===  "All") {
-      return filePages * copies
-    }
-
-    else {
-      let totalPages = 0
-      let ranges = selection.split(',')
-
-      ranges.forEach(range => {
-        let subRange = range.split('-')
-        if (subRange.length === 1) {
-          totalPages++
-        }
-        else {
-          const start = Number(subRange[0])
-          const end = Number(subRange[1])
-
-          totalPages = end > start ? end - start + 1 : start - end + 1
-        }
-      })
-
-      return totalPages * copies
-    }
-  }
+  const { file, pages, copies, scale, monochrome, totalPages } = summary
 
   return (
     <div className="overlay">
@@ -47,7 +21,7 @@ const ConfirmModal = (props) => {
             <p>{copies}</p>
 
             <p>Total Pages:</p>
-            <p>{calculateTotalPages(pages, copies, file.filePages)}</p>
+            <p>{totalPages}</p>
 
             <p>Color Mode:</p>
             <p>{monochrome ? "Black & White" : "Color"}</p>

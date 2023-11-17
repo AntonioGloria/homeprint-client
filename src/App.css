@@ -179,7 +179,7 @@ button:hover, .file-preview label:hover {
 }
 
 .input-set {
-    margin: 2em 0;
+    margin-bottom: 2em;
 }
 
 .radio-grp {
@@ -213,4 +213,9 @@ button:hover, .file-preview label:hover {
 
 .print-summary p:nth-child(even) {
     text-align: left;
+}
+
+.multi {
+    display: flex;
+    justify-content: space-between;
 }
