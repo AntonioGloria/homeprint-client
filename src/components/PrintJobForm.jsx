@@ -159,7 +159,7 @@ const PrintJobForm = () => {
 
         {(preview && file) &&
           <div className='file-preview'>
-            <h3>{file.originalname} - {file.filePages} Pages</h3>
+            <h3>{file.originalname} - {file.filePages} Page{file.filePages > 1 && "s"}</h3>
             <iframe src={preview}/>
             <label htmlFor='print-file' onChange={(e) => handleAddFile(e)}>
               Choose a different file
@@ -169,6 +169,7 @@ const PrintJobForm = () => {
         }
 
         <div className='form-section'>
+          <h3 className='input-set'>Print Settings</h3>
           <div className='input-set'>
             <label htmlFor='pages'><strong>Page(s) to Print: </strong></label>
             <input id='pages' name='pages' type='text' value={pages} onChange={(e) => calculateTotalPages(e.target)}/>
